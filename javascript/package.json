@@ -1,0 +1,13 @@
+{
+  "name": "fiscura-examples-js",
+  "private": true,
+  "type": "module",
+  "description": "JavaScript examples for the Fiscura e-Factura API",
+  "scripts": {
+    "validate": "node validate.mjs",
+    "sdk": "node sdk.mjs"
+  },
+  "dependencies": {
+    "@gaperi/fiscura-sdk": "^0.1.0"
+  }
+}
