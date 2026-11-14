@@ -25,8 +25,9 @@ Authorization: Bearer fisc_live_your_key
 # or:  x-api-key: fisc_live_your_key
 ```
 
-`validate` is **free and needs no key**. `generate`, `convert`, and `extract` need a key —
-[grab a free one](https://fiscura.ro/free-key).
+`validate` is **free and needs no key**. `generate` and `convert` need a key —
+[grab a free one](https://fiscura.ro/free-key). `extract` works without a key for up to 10 PDFs
+a month per IP, or with a key on its plan's allowance; `curl/extract.sh` sends one.
 
 ## Quickstart — validate an invoice (free, no key)
 
