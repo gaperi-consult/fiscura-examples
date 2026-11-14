@@ -31,10 +31,10 @@ try {
     issueDate: "2026-07-23",
     currency: "RON",
     supplier: { name: "Furnizor Demo SRL", vatId: "RO13548146",
-      address: { line1: "Str. Exemplu nr. 1", city: "Bucuresti", countryCode: "RO" } },
+      address: { line1: "Str. Exemplu nr. 1", city: "SECTOR1", countySubentity: "RO-B", countryCode: "RO" } },
     buyer: { name: "Client Demo SRL", vatId: "RO12345678",
-      address: { line1: "Bd. Test nr. 22", city: "Cluj-Napoca", countryCode: "RO" } },
-    lines: [{ description: "Servicii consultanta", quantity: 10, unitPrice: 100, vatRate: 19 }],
+      address: { line1: "Bd. Test nr. 22", city: "Cluj-Napoca", countySubentity: "RO-CJ", countryCode: "RO" } },
+    lines: [{ description: "Servicii consultanta", quantity: 10, unitPrice: 100, vatRate: 21 }],
   });
   console.log("generate →", g.valid ? "valid RO_CIUS UBL" : `${g.errors.length} rules to fix`);
 } catch (err) {

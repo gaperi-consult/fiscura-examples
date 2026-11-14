@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Self-serve a FREE API key (100 calls/day, no card, no account).
+# Self-serve a FREE API key (500 calls a month plus 10 PDF extractions, no card, no account).
 # The key is shown once — save it. Requires: curl, jq.
 # Usage: bash curl/free-key.sh you@company.ro
 set -euo pipefail

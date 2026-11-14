@@ -6,13 +6,13 @@ own code, with cryptic rule failures **explained in plain language** (Romanian +
 
 - 🌐 **Website & free validator:** <https://fiscura.ro>
 - 📖 **API docs:** <https://fiscura.ro/docs>
-- 🔑 **Free API key** (100 calls/day, no card): <https://fiscura.ro/free-key>
+- 🔑 **Free API key** (500 calls a month plus 10 PDF extractions, no card): <https://fiscura.ro/free-key>
 - 📦 **TypeScript SDK:** [`@gaperi/fiscura-sdk`](https://www.npmjs.com/package/@gaperi/fiscura-sdk)
 
-> Romania's e-Factura is mandatory. Fiscura is the developer API for it: deterministic
-> validation on the official EN 16931 + CIUS-RO Schematron, invoice generation and UBL↔CII
-> conversion — plus the part every other tool skips: turning `BR-RO-081` into a sentence a
-> human can act on.
+> Romania's e-Factura is mandatory (OUG 120/2021). Fiscura is a developer API for it:
+> deterministic validation on the official EN 16931 + CIUS-RO Schematron, invoice generation
+> and UBL↔CII conversion, and plain-language explanations of failed rules, so `BR-RO-081`
+> becomes a sentence a person can act on, in Romanian and English.
 
 ## Base URL & auth
 
@@ -41,20 +41,28 @@ or in JavaScript (Node 18+, no dependencies):
 node javascript/validate.mjs
 ```
 
-Both hit `POST /v1/validate` with the [sample invoice](samples/invoice.xml) and print the
-failing rules with their explanations, e.g.:
+Both hit `POST /v1/validate` with the deliberately incomplete [sample invoice](samples/invoice.xml)
+and print each failing rule with its explanation. Abridged output of `node javascript/validate.mjs`,
+run on 2026-11-14 (the `…` line stands for six more EN 16931 errors):
 
 ```
-valid: false  ·  2 errors, 1 warnings
+valid: false  ·  10 errors, 0 warnings
 
-[BR-RO-081] Adresa Vanzatorului - Linia 1 (BT-35) trebuie furnizata. / Seller address line 1 (BT-35) must be provided.
-   fix: cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:StreetName
-[BR-RO-082] Adresa Cumparatorului - Linia 1 (BT-50) trebuie furnizata. / Buyer address line 1 (BT-50) must be provided.
-   fix: cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:StreetName
+[BR-CO-15] The invoice total with VAT (BT-112) does not equal total without VAT (BT-109) plus total VAT (BT-110).
+   fix: Set TaxInclusiveAmount = TaxExclusiveAmount + total TaxAmount, rounded to 2 decimals.
+…
+[BR-RO-081] Seller address line 1 must be provided. ANAF e-Factura requires the complete seller address to verify business identity.
+   fix: Add the seller's street address (BT-35), for example: 'Str. Exemplu nr. 10' or 'Calea Victoriei 123'.
+[BR-RO-082] Buyer address line 1 must be provided. ANAF e-Factura requires the complete buyer address for invoice validation.
+   fix: Add the buyer's street address (BT-50), for example: 'Bulevardul Unirii 45' or 'Piața Romană 8'.
+[BR-RO-100] If seller is in Bucharest (country subdivision BT-39 = RO-B), the city name (BT-37) must use SECTOR-RO codes (SECTOR1 through SECTOR6) instead of 'Bucuresti'. This ensures precise location coding for Bucharest's administrative divisions.
+   fix: Replace 'Bucuresti' or 'Bucuresti S1' with the correct sector code: 'SECTOR1', 'SECTOR2', 'SECTOR3', 'SECTOR4', 'SECTOR5', or 'SECTOR6' (matching the actual sector where the seller operates).
 ```
 
-(Well-known rule codes get a curated, plain-language explanation; the rest fall back
-to the official bilingual message plus the exact path to fix — as above.)
+(BR-CO-15 is explained from Fiscura's curated dictionary, so its text is the same on every run.
+The other codes in this run were explained by a capped AI model; when the model is unavailable,
+the API falls back to the official rule text plus the condition it checks. That wording can
+differ between runs; the verdict and the rule codes do not.)
 
 ## Endpoints
 
